@@ -1,5 +1,6 @@
 const express= require('express');
 const exphbs = require('express-handlebars');
+const session= require('express-session');
 const fs= require('fs');
 
 
@@ -9,14 +10,26 @@ const PORT = 3000;
 //MidleWare
 // app.set("views", __dirname + '/views');
 
-
-//Sets handlebars configurations
+app.use(express.urlencoded({extended: true}));
 app.engine('hbs', exphbs({
     defaultLayout: 'main',
     extname: '.hbs'
 }));
+app.use(session({
+    secret:"test",
+    resave:false,
+    saveUninitialized: false
+}));
 
 app.set('view engine', 'hbs');
+
+const login = (req,res,next) =>{
+    if(!req.session.userId){
+        res.redirect("/login");
+    }else{
+        next();
+    }
+}
 
 //Db
 
@@ -25,11 +38,12 @@ const users= JSON.parse(fs.readFileSync('db.json'));
 //Routes
 
 app.get("/", (req,res)=>{
-    res.redirect('/home')
+    res.redirect('/home');
 })
 
-app.get("/home", (req,res)=>{
-    res.send("home");
+
+app.get("/home", login, (req,res)=>{
+    res.render("home");
 })
 
 app.get("/login", (req,res)=>{
@@ -37,7 +51,13 @@ app.get("/login", (req,res)=>{
 })
 
 app.post('/login', (req,res)=>{
-    console.log(req.body);
+    const user= users.find(user => user.email === req.body.email);
+    if(!user || user.password!==req.body.password){
+        return res.status(400).send("Invalid credentials");
+    }
+    req.session.userId=user.id;
+    res.render("home");
+    console.log(req.session);
 
 })
 
