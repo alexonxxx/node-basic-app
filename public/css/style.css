@@ -1,0 +1,24 @@
+.outside-form{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: indigo;
+}
+
+.form-layout{
+    max-width: 600px;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px grey solid;
+    border-radius: 10px;
+    padding: 30px;
+    background-color: white;
+}
+.error-login{
+    color: red;
+}
+.user-changed{
+    color: green;
+}

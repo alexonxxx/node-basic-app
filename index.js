@@ -9,7 +9,8 @@ const PORT = 3000;
 
 //MidleWare
 // app.set("views", __dirname + '/views');
-
+app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
+app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({extended: true}));
 app.engine('hbs', exphbs({
     defaultLayout: 'main',
@@ -54,7 +55,8 @@ app.get("/login", (req,res)=>{
 app.post('/login', (req,res)=>{
     const user= users.find(user => user.email === req.body.email);
     if(!user || user.password!==req.body.password){
-        return res.status(400).send("Invalid credentials");
+        // return res.status(400).send("Invalid credentials");
+        return res.render("login",{error:"Invalid credentials"})
     }
     req.session.userId=user.id;
     res.render("home",{user: user});
@@ -75,14 +77,14 @@ app.post('/edit',login,(req,res) => {
         if(err) return console.log(error)
         console.log(`User ${user.id} email changed to ${user.email}`);
     })
-    res.render("edit",{email: user.email});
+    res.render("edit",{email: user.email, changed: "User changed"});
 })
-// app.get("*", (req, res) => {
+app.get("*", (req, res) => {
   
-//     // Here user can also design an
-//     // error page and render it 
-//     res.send("PAGE NOT FOUND");
-//   });
+    // Here user can also design an
+    // error page and render it 
+    res.render("error");
+  });
 
 
 //Server

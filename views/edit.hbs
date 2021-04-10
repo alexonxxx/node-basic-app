@@ -1,4 +1,14 @@
-<form action="/edit" method="POST">
-    <input type="email" name="email" placeholder="New email" value="{{email}}"/>
-    <input type="submit"/>
-</form>
+<div class="outside-form">
+    <div class="form-layout">
+        <h1>Edit user</h1>
+        <form action="/edit" method="POST" class="mt-3">
+            <div class="form-group">
+                <input class="form-control" type="email" name="email" placeholder="New email" value="{{email}}"/>
+            </div>
+            <div class="user-changed">
+                <p>{{changed}}</p>
+            </div>
+            <input class="btn btn-secondary" type="submit" value="Edit">
+        </form>
+    </div>
+</div>
