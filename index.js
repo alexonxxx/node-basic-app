@@ -43,7 +43,8 @@ app.get("/", (req,res)=>{
 
 
 app.get("/home", login, (req,res)=>{
-    res.render("home");
+    const user= users.find(user => user.id === req.session.userId);
+    res.render("home",{name:user.name});
 })
 
 app.get("/login", (req,res)=>{
@@ -56,11 +57,26 @@ app.post('/login', (req,res)=>{
         return res.status(400).send("Invalid credentials");
     }
     req.session.userId=user.id;
-    res.render("home");
+    res.render("home",{user: user});
     console.log(req.session);
 
 })
+app.get('/edit',login,(req,res) => {
+    const user= users.find(user => user.id === req.session.userId);
+    res.render("edit",{email:user.email});
+})
 
+
+app.post('/edit',login,(req,res) => {
+    const user= users.find(user => user.id === req.session.userId);
+    user.email=req.body.email;
+  
+    fs.writeFile("db.json",JSON.stringify(users),(err) => {
+        if(err) return console.log(error)
+        console.log(`User ${user.id} email changed to ${user.email}`);
+    })
+    res.render("edit",{email: user.email});
+})
 // app.get("*", (req, res) => {
   
 //     // Here user can also design an
