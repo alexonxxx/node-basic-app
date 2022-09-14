@@ -4,7 +4,9 @@
     width: 100%;
     background-color: indigo;
 }
-
+.test{
+    content:"Test tag bug v2.0";
+}
 .form-layout{
     max-width: 600px;
     position: relative;
